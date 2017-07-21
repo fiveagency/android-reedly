@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Reedly</string>
+
+    <string name="NEW">NEW</string>
+    <string name="feed_url">Feed URL</string>
+    <string name="add">Add</string>
+
+    <string name="please_check_internet_connection_message">Please check your internet connection</string>
+
+    <string name="looks_like_you_need_a_feed_to_read">Looks like you need a feed to read</string>
+    <string name="already_subscribed_message">You are already subscribed to this feed dummy :)</string>
+    <string name="incorrect_feed_url_message">Incorrect feed URL, please check and try again</string>
+
+    <string name="new_articles">New articles!</string>
+    <string name="there_have_been_new_articles">There have been some new articles posted in your feeds</string>
+
+</resources>

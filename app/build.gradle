@@ -1,0 +1,123 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'me.tatarka:gradle-retrolambda:' + project.ext.retrolambdaVersion
+    }
+}
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+def getEnvironmentVariable(String variableName, int defaultValue) {
+    String environmentVariable = System.getenv(variableName)
+    if (environmentVariable != null) {
+        return Integer.parseInt(environmentVariable)
+    } else {
+        return defaultValue
+    }
+}
+
+def getVersionMajor() {
+    return getEnvironmentVariable('VERSION_MAJOR', 1)
+}
+
+def getVersionMinor() {
+    return getEnvironmentVariable('VERSION_MINOR', 0)
+}
+
+def getVersionPatch() {
+    return getEnvironmentVariable('VERSION_PATCH', 0)
+}
+
+// bump for dogfood builds, public betas, etc.
+def getVersionBuild() {
+    return getEnvironmentVariable('BUILD_NUMBER', 0)
+}
+
+def buildVersionCode() {
+    return getVersionMajor() * 10000000 + getVersionMinor() * 100000 + getVersionPatch() * 1000 + getVersionBuild()
+}
+
+def buildVersionName() {
+    return "${getVersionMajor()}.${getVersionMinor()}.${getVersionPatch()}"
+}
+
+task version {
+    doLast {
+        println "Current version:"
+        println "Version code: ${buildVersionCode()}"
+        println "Version name: ${buildVersionName()}"
+    }
+}
+
+retrolambda {
+    jvmArgs '-noverify'
+}
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "oxim.digital.reedly"
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode buildVersionCode()
+        versionName buildVersionName()
+
+        vectorDrawables.useSupportLibrary = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+dependencies {
+
+    compile project(':domain')
+    compile project(':data')
+    compile project(':device')
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:" + project.ext.supportLibVersion
+
+    testCompile 'junit:junit:4.12'
+
+    apt 'com.google.dagger:dagger-compiler:2.2'
+    compile 'com.google.dagger:dagger:2.2'
+
+    compile 'com.annimon:stream:' + project.ext.streamsVersion
+    compile 'io.reactivex:rxjava:' + project.ext.rxJavaVersion
+    compile 'io.reactivex:rxandroid:' + project.ext.rxAndroidVersion
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile "com.android.support:design:" + project.ext.supportLibVersion
+    compile "com.android.support:recyclerview-v7:" + project.ext.supportLibVersion
+    compile "com.android.support:cardview-v7:" + project.ext.supportLibVersion
+
+    compile 'com.facebook.stetho:stetho:1.4.2'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+}

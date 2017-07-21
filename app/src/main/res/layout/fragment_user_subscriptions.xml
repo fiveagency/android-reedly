@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/toolbar"
+            style="@style/Toolbar">
+
+            <TextView
+                style="@style/Toolbar.TittleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:text="@string/app_name"/>
+
+            <ImageView
+                android:id="@+id/show_favourites_button"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:foregroundGravity="center_vertical"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:srcCompat="@drawable/all_favourites_icon"/>
+
+            <ImageView
+                android:id="@+id/toggle_notifications_button"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="@dimen/feed_notification_image_end_margin"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:foregroundGravity="center_vertical"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:srcCompat="@drawable/ic_active_notification"/>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/user_feeds_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/empty_state_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            style="@style/DescriptionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="@dimen/large_margin"
+            android:layout_marginStart="@dimen/large_margin"
+            android:layout_marginTop="@dimen/feed_empty_state_text_top_margin"
+            android:gravity="center"
+            android:text="@string/looks_like_you_need_a_feed_to_read"
+            android:textSize="@dimen/feed_empty_state_text_size"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/pointer_image_bottom_margin"
+            android:layout_marginEnd="@dimen/pointer_image_end_margin"
+            app:srcCompat="@drawable/pointer"/>
+
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_new_feed_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/small_margin"
+        android:src="@android:drawable/stat_sys_upload_done"/>
+
+</FrameLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/feed_content_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:minHeight="@dimen/feed_list_item_min_height">
+
+    <LinearLayout
+        android:id="@+id/feed_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/small_margin"
+        android:paddingTop="@dimen/small_margin">
+
+        <ImageView
+            android:id="@+id/feed_image"
+            android:layout_width="@dimen/feed_image_size"
+            android:layout_height="@dimen/feed_image_size"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/smallest_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/smallest_margin"
+            android:src="@drawable/secondary_circle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/feed_title"
+                style="@style/TitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="xkcd.com"/>
+
+            <TextView
+                android:id="@+id/feed_description"
+                style="@style/DescriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/half_margin"
+                android:ellipsize="end"
+                android:maxLines="3"
+                tools:text="Lorem ipsum categorized libraries"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <oxim.digital.reedly.ui.view.RevealFillView
+        android:id="@+id/selected_indicator_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/feed_container"
+        android:layout_alignTop="@id/feed_container"
+        app:revealFillColor="@color/favouritePink"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/divider_margin"
+        android:background="@color/dividers"/>
+
+</RelativeLayout>

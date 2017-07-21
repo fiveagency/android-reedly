@@ -1,0 +1,30 @@
+<resources>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_elevation">3dp</dimen>
+    <dimen name="toolbar_text_size">16sp</dimen>
+    <dimen name="toolbar_title_start_margin">24dp</dimen>
+    <dimen name="toolbar_icon_size">24dp</dimen>
+
+    <dimen name="half_margin">4dp</dimen>
+    <dimen name="smallest_margin">8dp</dimen>
+    <dimen name="small_margin">16dp</dimen>
+    <dimen name="normal_margin">24dp</dimen>
+    <dimen name="large_margin">32dp</dimen>
+
+    <dimen name="feed_list_item_min_height">72dp</dimen>
+    <dimen name="feed_image_size">48dp</dimen>
+    <dimen name="feed_notification_image_end_margin">64dp</dimen>
+    <dimen name="feed_empty_state_text_top_margin">120dp</dimen>
+    <dimen name="feed_empty_state_text_size">32sp</dimen>
+
+    <dimen name="divider_margin">72dp</dimen>
+
+    <dimen name="feed_url_input_top_margin">20dp</dimen>
+    <dimen name="pointer_image_bottom_margin">48dp</dimen>
+    <dimen name="pointer_image_end_margin">72dp</dimen>
+
+    <dimen name="favourite_button_size">36dp</dimen>
+</resources>
