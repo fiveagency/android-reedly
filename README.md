@@ -1,6 +1,6 @@
 # README - Reedly #
 
-This is the GitHub repo for the Reedly RSS reader app that showcases Clean Architecture.
+This is the Git repo for the Reedly RSS reader app that showcases Clean Architecture.
 
 To learn more about the Clean Architecture, take a look at this blog series:
 
@@ -10,7 +10,7 @@ To learn more about the Clean Architecture, take a look at this blog series:
 
 In order to build the project:
 
-1. git clone git@github.com:fiveagency/Reedly.git
+1. git clone git@bitbucket.org:fiveminutes/reedly.git
 2. Import the project into Android Studio by selecting settings.gradle file in the root of the project.
 
 **NOTE:** You should use at least Android Studio 2.3.2.
@@ -20,7 +20,7 @@ In order to build the project:
 
 ## LICENSE
 
-    Copyright 2017 Mihael Franceković - Five
+    Copyright 2017 Mihael Franceković
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
