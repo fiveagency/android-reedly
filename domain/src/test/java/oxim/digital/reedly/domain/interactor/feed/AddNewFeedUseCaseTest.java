@@ -1,41 +1,51 @@
 package oxim.digital.reedly.domain.interactor.feed;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
 
+import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
-import rx.functions.Action1;
+import rx.observers.TestSubscriber;
 
 public final class AddNewFeedUseCaseTest {
 
     private AddNewFeedUseCase addNewFeedUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         addNewFeedUseCase = new AddNewFeedUseCase(feedRepository);
     }
 
-    @org.junit.Test
-    public void executeSuccessfully() throws Exception {
+    @Test
+    public void executeUpdatedSuccessfully() throws Exception {
         Mockito.when(feedRepository.createNewFeed(Mockito.any())).thenReturn(Completable.complete());
 
-        addNewFeedUseCase.execute("www.google.com").subscribe();
+        final TestSubscriber testSubscriber = new TestSubscriber();
+        addNewFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed("www.google.com");
+        Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed(DomainTestData.TEST_URL_STRING);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
     }
 
-    @org.junit.Test
-    public void executeWithError() throws Exception {
+    @Test
+    public void executeWithErrorInRepository() throws Exception {
         Mockito.when(feedRepository.createNewFeed(Mockito.any())).thenReturn(Completable.error(new IOException()));
 
-        final Action1<Throwable> mockThrowableAction1 = Mockito.mock(Action1.class);
-        addNewFeedUseCase.execute("www.google.com").subscribe(() -> {}, mockThrowableAction1);
+        final TestSubscriber testSubscriber = new TestSubscriber();
+        addNewFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed("www.google.com");
-        Mockito.verify(mockThrowableAction1, Mockito.times(1)).call(Mockito.any(Throwable.class));
+        Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed(DomainTestData.TEST_URL_STRING);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertNotCompleted();
+        testSubscriber.assertError(IOException.class);
     }
 }

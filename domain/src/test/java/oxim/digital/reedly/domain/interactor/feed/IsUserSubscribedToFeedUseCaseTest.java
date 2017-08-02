@@ -1,27 +1,50 @@
 package oxim.digital.reedly.domain.interactor.feed;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
+import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Single;
+import rx.observers.TestSubscriber;
 
 public final class IsUserSubscribedToFeedUseCaseTest {
 
     private IsUserSubscribedToFeedUseCase isUserSubscribedToFeedUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         isUserSubscribedToFeedUseCase = new IsUserSubscribedToFeedUseCase(feedRepository);
     }
 
-    @org.junit.Test
-    public void execute() throws Exception {
-        Mockito.when(feedRepository.feedExists(Mockito.anyString())).thenReturn(Single.just(true));
+    @Test
+    public void executeWhenUserIsSubscriber() throws Exception {
+        Mockito.when(feedRepository.feedExists(DomainTestData.TEST_URL_STRING)).thenReturn(Single.just(true));
 
-        isUserSubscribedToFeedUseCase.execute("aaa").subscribe();
+        final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
+        isUserSubscribedToFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).feedExists("aaa");
+        Mockito.verify(feedRepository, Mockito.times(1)).feedExists(DomainTestData.TEST_URL_STRING);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(true);
+    }
+
+    @Test
+    public void executeWhenUserIsNotSubscriber() throws Exception {
+        Mockito.when(feedRepository.feedExists(DomainTestData.TEST_URL_STRING)).thenReturn(Single.just(false));
+
+        final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
+        isUserSubscribedToFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
+
+        Mockito.verify(feedRepository, Mockito.times(1)).feedExists(DomainTestData.TEST_URL_STRING);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(false);
     }
 }

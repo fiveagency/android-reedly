@@ -12,4 +12,6 @@ public final class DomainTestData {
     public static final Long TEST_LONG = 64L;
 
     public static final Feed TEST_FEED = new Feed(78, "title", "image_url", "link", "description", "url");
+
+    public static final String TEST_URL_STRING = "http://www.google.com";
 }

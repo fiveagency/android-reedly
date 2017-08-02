@@ -1,42 +1,53 @@
 package oxim.digital.reedly.domain.interactor.feed;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
+import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
 import rx.functions.Action1;
+import rx.observers.TestSubscriber;
 
 public final class DeleteFeedUseCaseTest {
 
     private DeleteFeedUseCase deleteFeedUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         deleteFeedUseCase = new DeleteFeedUseCase(feedRepository);
     }
 
-    @org.junit.Test
-    public void executeSuccessfully() throws Exception {
-        Mockito.when(feedRepository.deleteFeed(Mockito.anyInt())).thenReturn(Completable.complete());
+    @Test
+    public void executeDeleteSuccessful() throws Exception {
+        Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER)).thenReturn(Completable.complete());
 
-        deleteFeedUseCase.execute(3).subscribe();
+        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(3);
+        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(DomainTestData.TEST_INTEGER);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
     }
 
-    @org.junit.Test
-    public void executeWithError() throws Exception {
-        Mockito.when(feedRepository.deleteFeed(Mockito.anyInt())).thenReturn(Completable.error(new SQLException()));
+    @Test
+    public void executeWithErrorInRepository() throws Exception {
+        Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER)).thenReturn(Completable.error(new IOException()));
 
-        final Action1<Throwable> mockThrowableAction1 = Mockito.mock(Action1.class);
-        deleteFeedUseCase.execute(3).subscribe(() -> {}, mockThrowableAction1);
+        final TestSubscriber testSubscriber = new TestSubscriber();
+        deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(3);
-        Mockito.verify(mockThrowableAction1, Mockito.times(1)).call(Mockito.any(Throwable.class));
+        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(DomainTestData.TEST_INTEGER);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertNotCompleted();
+        testSubscriber.assertError(IOException.class);
     }
 }
