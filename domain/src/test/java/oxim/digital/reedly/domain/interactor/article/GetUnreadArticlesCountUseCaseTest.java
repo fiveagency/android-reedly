@@ -1,27 +1,36 @@
 package oxim.digital.reedly.domain.interactor.article;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
+import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Single;
+import rx.observers.TestSubscriber;
 
 public final class GetUnreadArticlesCountUseCaseTest {
 
     private GetUnreadArticlesCountUseCase getUnreadArticlesCountUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         getUnreadArticlesCountUseCase = new GetUnreadArticlesCountUseCase(feedRepository);
     }
 
-    @org.junit.Test
+    @Test
     public void execute() throws Exception {
-        Mockito.when(feedRepository.getUnreadArticlesCount()).thenReturn(Single.just(34L));
+        Mockito.when(feedRepository.getUnreadArticlesCount()).thenReturn(Single.just(DomainTestData.TEST_LONG));
 
-        getUnreadArticlesCountUseCase.execute().subscribe();
+        final TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
+        getUnreadArticlesCountUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).getUnreadArticlesCount();
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertValue(DomainTestData.TEST_LONG);
+        testSubscriber.assertCompleted();
     }
 }

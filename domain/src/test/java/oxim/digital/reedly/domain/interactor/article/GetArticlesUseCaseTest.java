@@ -1,29 +1,39 @@
 package oxim.digital.reedly.domain.interactor.article;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import oxim.digital.reedly.domain.interactor.DomainTestData;
+import oxim.digital.reedly.domain.model.Article;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Single;
+import rx.observers.TestSubscriber;
 
 public final class GetArticlesUseCaseTest {
 
     private GetArticlesUseCase getArticlesUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         getArticlesUseCase = new GetArticlesUseCase(feedRepository);
     }
 
-    @org.junit.Test
+    @Test
     public void execute() throws Exception {
-        Mockito.when(feedRepository.getArticles(Mockito.anyInt())).thenReturn(Single.just(new ArrayList<>()));
+        Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER)).thenReturn(Single.just(new ArrayList<>()));
 
-        getArticlesUseCase.execute(101).subscribe();
+        final TestSubscriber<List<Article>> testSubscriber = new TestSubscriber<>();
+        getArticlesUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).getArticles(101);
+        Mockito.verify(feedRepository, Mockito.times(1)).getArticles(DomainTestData.TEST_INTEGER);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
     }
 }

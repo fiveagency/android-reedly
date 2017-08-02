@@ -1,30 +1,52 @@
 package oxim.digital.reedly.domain.interactor.feed.update;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
+
+import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.model.Feed;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
+import rx.observers.TestSubscriber;
 
 public final class UpdateFeedUseCaseTest {
 
     private UpdateFeedUseCase updateFeedUseCase;
     private FeedRepository feedRepository;
 
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
-
         updateFeedUseCase = new UpdateFeedUseCase(feedRepository);
     }
 
-    @org.junit.Test
-    public void execute() throws Exception {
+    @Test
+    public void executeUpdateSuccessfully() throws Exception {
         Mockito.when(feedRepository.updateArticles(Mockito.any())).thenReturn(Completable.complete());
 
-        final Feed feed = new Feed(78, "", "", "", "", "");
-        updateFeedUseCase.execute(feed).subscribe();
+        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        updateFeedUseCase.execute(DomainTestData.TEST_FEED).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).updateArticles(feed);
+        Mockito.verify(feedRepository, Mockito.times(1)).updateArticles(DomainTestData.TEST_FEED);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
+    }
+
+    @Test
+    public void executeUpdateWithErrorInRepository() throws Exception {
+        Mockito.when(feedRepository.updateArticles(Mockito.any())).thenReturn(Completable.error(new IOException()));
+
+        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        updateFeedUseCase.execute(DomainTestData.TEST_FEED).subscribe(testSubscriber);
+
+        Mockito.verify(feedRepository, Mockito.times(1)).updateArticles(DomainTestData.TEST_FEED);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertNotCompleted();
+        testSubscriber.assertError(IOException.class);
     }
 }
