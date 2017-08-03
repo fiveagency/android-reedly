@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 
 import oxim.digital.reedly.device.DeviceTestData;
 
-public class JobsImplTest {
+public final class JobsImplTest {
 
     private JobsImpl jobsImpl;
     private JobInfo jobInfo;
