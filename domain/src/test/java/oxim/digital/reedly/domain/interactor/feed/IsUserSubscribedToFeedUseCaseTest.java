@@ -21,7 +21,7 @@ public final class IsUserSubscribedToFeedUseCaseTest {
     }
 
     @Test
-    public void executeWhenUserIsSubscriber() throws Exception {
+    public void executeWhenUserIsSubscribed() throws Exception {
         Mockito.when(feedRepository.feedExists(DomainTestData.TEST_URL_STRING)).thenReturn(Single.just(true));
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -35,7 +35,7 @@ public final class IsUserSubscribedToFeedUseCaseTest {
     }
 
     @Test
-    public void executeWhenUserIsNotSubscriber() throws Exception {
+    public void executeWhenUserIsNotSubscribed() throws Exception {
         Mockito.when(feedRepository.feedExists(DomainTestData.TEST_URL_STRING)).thenReturn(Single.just(false));
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
