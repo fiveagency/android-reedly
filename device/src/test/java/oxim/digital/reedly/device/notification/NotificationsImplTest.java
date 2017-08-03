@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 
 import oxim.digital.reedly.device.DeviceTestData;
 
-public class NotificationsImplTest {
+public final class NotificationsImplTest {
 
     private NotificationsImpl notificationsImpl;
     private NotificationManagerCompat notificationManagerCompat;
