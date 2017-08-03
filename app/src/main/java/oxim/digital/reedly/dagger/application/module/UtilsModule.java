@@ -1,6 +1,7 @@
 package oxim.digital.reedly.dagger.application.module;
 
 import android.content.Context;
+import android.support.v4.app.NotificationManagerCompat;
 
 import javax.inject.Singleton;
 
@@ -76,8 +77,14 @@ public final class UtilsModule {
 
     @Provides
     @Singleton
-    Notifications provideNotifications(final @ForApplication Context context) {
-        return new NotificationsImpl(context);
+    Notifications provideNotifications(final NotificationManagerCompat notificationManagerCompat) {
+        return new NotificationsImpl(notificationManagerCompat);
+    }
+
+    @Provides
+    @Singleton
+    NotificationManagerCompat provideNotificationManagerCompat(final @ForApplication Context context) {
+        return NotificationManagerCompat.from(context);
     }
 
     @Provides
