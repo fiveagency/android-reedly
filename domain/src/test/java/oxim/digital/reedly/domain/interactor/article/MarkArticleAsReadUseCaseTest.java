@@ -15,18 +15,19 @@ public final class MarkArticleAsReadUseCaseTest {
 
     private MarkArticleAsReadUseCase markArticleAsReadUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<Object> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         markArticleAsReadUseCase = new MarkArticleAsReadUseCase(feedRepository);
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void executeMarkingAsCompletedSuccessful() throws Exception {
         Mockito.when(feedRepository.markArticleAsRead(DomainTestData.TEST_INTEGER)).thenReturn(Completable.complete());
 
-        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         markArticleAsReadUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).markArticleAsRead(DomainTestData.TEST_INTEGER);
@@ -39,7 +40,6 @@ public final class MarkArticleAsReadUseCaseTest {
     public void executeMarkingAsCompletedError() throws Exception {
         Mockito.when(feedRepository.markArticleAsRead(DomainTestData.TEST_INTEGER)).thenReturn(Completable.error(new IOException()));
 
-        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         markArticleAsReadUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).markArticleAsRead(DomainTestData.TEST_INTEGER);

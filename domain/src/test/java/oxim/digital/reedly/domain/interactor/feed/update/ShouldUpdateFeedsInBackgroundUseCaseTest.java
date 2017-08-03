@@ -12,18 +12,19 @@ public final class ShouldUpdateFeedsInBackgroundUseCaseTest {
 
     private ShouldUpdateFeedsInBackgroundUseCase shouldUpdateFeedsInBackgroundUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<Boolean> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         shouldUpdateFeedsInBackgroundUseCase = new ShouldUpdateFeedsInBackgroundUseCase(feedRepository);
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void executeShouldUpdate() throws Exception {
         Mockito.when(feedRepository.shouldUpdateFeedsInBackground()).thenReturn(Single.just(true));
 
-        final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
         shouldUpdateFeedsInBackgroundUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).shouldUpdateFeedsInBackground();
@@ -37,7 +38,6 @@ public final class ShouldUpdateFeedsInBackgroundUseCaseTest {
     public void executeShouldNotUpdate() throws Exception {
         Mockito.when(feedRepository.shouldUpdateFeedsInBackground()).thenReturn(Single.just(false));
 
-        final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
         shouldUpdateFeedsInBackgroundUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).shouldUpdateFeedsInBackground();
