@@ -17,23 +17,28 @@ public final class GetArticlesUseCaseTest {
 
     private GetArticlesUseCase getArticlesUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<List<Article>> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         getArticlesUseCase = new GetArticlesUseCase(feedRepository);
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void execute() throws Exception {
-        Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER)).thenReturn(Single.just(new ArrayList<>()));
+        final List<Article> articles = new ArrayList<>();
+        articles.add(DomainTestData.TEST_NEW_FAVOURITE_ARTICLE);
 
-        final TestSubscriber<List<Article>> testSubscriber = new TestSubscriber<>();
-        getArticlesUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
+        Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Single.just(articles));
 
-        Mockito.verify(feedRepository, Mockito.times(1)).getArticles(DomainTestData.TEST_INTEGER);
+        getArticlesUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
+
+        Mockito.verify(feedRepository, Mockito.times(1)).getArticles(DomainTestData.TEST_INTEGER_ID_1);
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
+        testSubscriber.assertValue(articles);
     }
 }

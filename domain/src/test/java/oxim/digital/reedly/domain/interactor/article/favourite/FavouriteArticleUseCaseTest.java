@@ -15,22 +15,23 @@ public final class FavouriteArticleUseCaseTest {
 
     private FavouriteArticleUseCase favouriteArticleUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<Object> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         favouriteArticleUseCase = new FavouriteArticleUseCase(feedRepository);
+
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void executeWithoutErrorsInDependencies() throws Exception {
-        Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER)).thenReturn(Completable.complete());
+        Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
-        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
 
-        favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).favouriteArticle(DomainTestData.TEST_INTEGER);
+        Mockito.verify(feedRepository, Mockito.times(1)).favouriteArticle(DomainTestData.TEST_INTEGER_ID_1);
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
@@ -38,13 +39,11 @@ public final class FavouriteArticleUseCaseTest {
 
     @Test
     public void executeFavouriteWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER)).thenReturn(Completable.error(new IOException()));
+        Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
 
-        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
 
-        favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).favouriteArticle(DomainTestData.TEST_INTEGER);
+        Mockito.verify(feedRepository, Mockito.times(1)).favouriteArticle(DomainTestData.TEST_INTEGER_ID_1);
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertNotCompleted();

@@ -16,11 +16,13 @@ public final class EnableBackgroundFeedUpdatesUseCaseTest {
 
     private SetShouldUpdateFeedsInBackgroundUseCase setShouldUpdateFeedsInBackgroundUseCaseMock;
     private FeedsUpdateScheduler feedUpdateScheduler;
+    private TestSubscriber testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         setShouldUpdateFeedsInBackgroundUseCaseMock = Mockito.mock(SetShouldUpdateFeedsInBackgroundUseCase.class);
         feedUpdateScheduler = Mockito.mock(FeedsUpdateScheduler.class);
+        testSubscriber = new TestSubscriber();
 
         enableBackgroundFeedUpdatesUseCase = new EnableBackgroundFeedUpdatesUseCase(setShouldUpdateFeedsInBackgroundUseCaseMock, feedUpdateScheduler);
     }
@@ -29,7 +31,6 @@ public final class EnableBackgroundFeedUpdatesUseCaseTest {
     public void executeWithErrorInSetShouldUpdateFeedsInBackgroundUseCase() throws Exception {
         Mockito.when(setShouldUpdateFeedsInBackgroundUseCaseMock.execute(true)).thenReturn(Completable.error(new IOException()));
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         enableBackgroundFeedUpdatesUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(setShouldUpdateFeedsInBackgroundUseCaseMock, Mockito.times(1)).execute(true);
@@ -46,7 +47,6 @@ public final class EnableBackgroundFeedUpdatesUseCaseTest {
     public void executeWithoutErrorsInDependencies() throws Exception {
         Mockito.when(setShouldUpdateFeedsInBackgroundUseCaseMock.execute(true)).thenReturn(Completable.complete());
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         enableBackgroundFeedUpdatesUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(setShouldUpdateFeedsInBackgroundUseCaseMock, Mockito.times(1)).execute(true);

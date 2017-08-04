@@ -15,18 +15,19 @@ public final class AddNewFeedUseCaseTest {
 
     private AddNewFeedUseCase addNewFeedUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         addNewFeedUseCase = new AddNewFeedUseCase(feedRepository);
+        testSubscriber = new TestSubscriber();
     }
 
     @Test
     public void executeUpdatedSuccessfully() throws Exception {
         Mockito.when(feedRepository.createNewFeed(Mockito.any())).thenReturn(Completable.complete());
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         addNewFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed(DomainTestData.TEST_URL_STRING);
@@ -39,7 +40,6 @@ public final class AddNewFeedUseCaseTest {
     public void executeWithErrorInRepository() throws Exception {
         Mockito.when(feedRepository.createNewFeed(Mockito.any())).thenReturn(Completable.error(new IOException()));
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         addNewFeedUseCase.execute(DomainTestData.TEST_URL_STRING).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).createNewFeed(DomainTestData.TEST_URL_STRING);

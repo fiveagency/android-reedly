@@ -17,11 +17,13 @@ public final class GetFavouriteArticlesUseCaseTest {
 
     private GetFavouriteArticlesUseCase getFavouriteArticlesUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<List<Article>> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         getFavouriteArticlesUseCase = new GetFavouriteArticlesUseCase(feedRepository);
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
@@ -33,14 +35,12 @@ public final class GetFavouriteArticlesUseCaseTest {
 
         Mockito.when(feedRepository.getFavouriteArticles()).thenReturn(Single.just(articleList));
 
-        final TestSubscriber<List<Article>> testSubscriber = new TestSubscriber<>();
         getFavouriteArticlesUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).getFavouriteArticles();
         Mockito.verifyNoMoreInteractions(feedRepository);
 
-        testSubscriber.assertValue(articleList);
-        testSubscriber.assertValueCount(1);
         testSubscriber.assertCompleted();
+        testSubscriber.assertValue(articleList);
     }
 }

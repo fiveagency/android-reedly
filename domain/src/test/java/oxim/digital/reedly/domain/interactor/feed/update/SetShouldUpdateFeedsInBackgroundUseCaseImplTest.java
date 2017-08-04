@@ -15,18 +15,19 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
 
     private SetShouldUpdateFeedsInBackgroundUseCase setShouldUpdateFeedsInBackgroundUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         setShouldUpdateFeedsInBackgroundUseCase = new SetShouldUpdateFeedsInBackgroundUseCase(feedRepository);
+        testSubscriber = new TestSubscriber();
     }
 
     @Test
     public void executeEnable() throws Exception {
         Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(true)).thenReturn(Completable.complete());
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         setShouldUpdateFeedsInBackgroundUseCase.execute(true).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).setShouldUpdateFeedsInBackground(true);
@@ -39,7 +40,6 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
     public void executeDisable() throws Exception {
         Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(false)).thenReturn(Completable.complete());
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         setShouldUpdateFeedsInBackgroundUseCase.execute(false).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).setShouldUpdateFeedsInBackground(false);
@@ -52,7 +52,6 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
     public void executeEnableWithErrorInRepository() throws Exception {
         Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(true)).thenReturn(Completable.error(new IOException()));
 
-        final TestSubscriber testSubscriber = new TestSubscriber();
         setShouldUpdateFeedsInBackgroundUseCase.execute(true).subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).setShouldUpdateFeedsInBackground(true);

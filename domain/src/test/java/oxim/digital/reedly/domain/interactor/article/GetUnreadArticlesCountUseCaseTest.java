@@ -13,18 +13,19 @@ public final class GetUnreadArticlesCountUseCaseTest {
 
     private GetUnreadArticlesCountUseCase getUnreadArticlesCountUseCase;
     private FeedRepository feedRepository;
+    private TestSubscriber<Long> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
         feedRepository = Mockito.mock(FeedRepository.class);
         getUnreadArticlesCountUseCase = new GetUnreadArticlesCountUseCase(feedRepository);
+        testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void execute() throws Exception {
         Mockito.when(feedRepository.getUnreadArticlesCount()).thenReturn(Single.just(DomainTestData.TEST_LONG));
 
-        final TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
         getUnreadArticlesCountUseCase.execute().subscribe(testSubscriber);
 
         Mockito.verify(feedRepository, Mockito.times(1)).getUnreadArticlesCount();
