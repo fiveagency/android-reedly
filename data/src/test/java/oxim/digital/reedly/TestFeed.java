@@ -18,10 +18,10 @@ public final class TestFeed implements Feed {
     private final String copyright;
     private final String imageLink;
     private final String author;
-    private final List<? extends Item> items;
+    private final List<Item> items;
 
     public TestFeed(final String link, final Date publicationDate, final String title, final String description, final String copyright, final String imageLink,
-                    final String author, final List<? extends Item> items) {
+                    final String author, final List<Item> items) {
         this.link = link;
         this.publicationDate = publicationDate;
         this.title = title;
@@ -76,7 +76,7 @@ public final class TestFeed implements Feed {
 
     @NonNull
     @Override
-    public List<? extends Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 }

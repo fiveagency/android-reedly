@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.einmalfel.earl.Enclosure;
 import com.einmalfel.earl.Item;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public final class TestItem implements Item {
     private final String imageLink;
     private final String author;
     private final String id;
-    private final List<? extends Enclosure> enclosures;
+    private final List<Enclosure> enclosures;
 
     public TestItem(final String link, final Date publicationDate, final String title, final String description, final String imageLink, final String author, final String id,
-                    final List<? extends Enclosure> enclosures) {
+                    final List<Enclosure> enclosures) {
         this.link = link;
         this.publicationDate = publicationDate;
         this.title = title;
@@ -42,7 +43,7 @@ public final class TestItem implements Item {
         this.imageLink = null;
         this.author = null;
         this.id = null;
-        this.enclosures = null;
+        this.enclosures = new ArrayList<>();
     }
 
     @Nullable
@@ -89,7 +90,7 @@ public final class TestItem implements Item {
 
     @NonNull
     @Override
-    public List<? extends Enclosure> getEnclosures() {
+    public List<Enclosure> getEnclosures() {
         return enclosures;
     }
 }
