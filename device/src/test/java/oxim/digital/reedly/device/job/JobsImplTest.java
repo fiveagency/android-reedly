@@ -26,26 +26,23 @@ public final class JobsImplTest {
 
     @Test
     public void scheduleWhenJobSchedulerReturnsSuccess() throws Exception {
-        Mockito.when(jobScheduler.schedule(jobInfo)).thenReturn(JobScheduler.RESULT_SUCCESS);
-
-        final int result = jobsImpl.schedule(jobInfo);
-
-        Mockito.verify(jobScheduler, Mockito.times(1)).schedule(jobInfo);
-        Mockito.verifyNoMoreInteractions(jobScheduler);
-
-        Assert.assertEquals(result, JobScheduler.RESULT_SUCCESS);
+        testScheduleWhenJobSchedulerReturnsResult(JobScheduler.RESULT_SUCCESS);
     }
 
     @Test
     public void scheduleWhenJobSchedulerReturnsFailure() throws Exception {
-        Mockito.when(jobScheduler.schedule(jobInfo)).thenReturn(JobScheduler.RESULT_FAILURE);
+        testScheduleWhenJobSchedulerReturnsResult(JobScheduler.RESULT_FAILURE);
+    }
 
-        final int result = jobsImpl.schedule(jobInfo);
+    private void testScheduleWhenJobSchedulerReturnsResult(final int expectedResult) {
+        Mockito.when(jobScheduler.schedule(jobInfo)).thenReturn(expectedResult);
+
+        final int givenResult = jobsImpl.schedule(jobInfo);
 
         Mockito.verify(jobScheduler, Mockito.times(1)).schedule(jobInfo);
         Mockito.verifyNoMoreInteractions(jobScheduler);
 
-        Assert.assertEquals(result, JobScheduler.RESULT_FAILURE);
+        Assert.assertEquals(givenResult, expectedResult);
     }
 
     @Test
