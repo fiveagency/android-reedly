@@ -18,14 +18,16 @@ import rx.Single;
 public final class FeedParserImpl implements FeedParser {
 
     private final CurrentTimeProvider currentTimeProvider;
+    private final ExternalParserWrapper externalParserWrapper;
 
-    public FeedParserImpl(final CurrentTimeProvider currentTimeProvider) {
+    public FeedParserImpl(final CurrentTimeProvider currentTimeProvider, final ExternalParserWrapper externalParserWrapper) {
         this.currentTimeProvider = currentTimeProvider;
+        this.externalParserWrapper = externalParserWrapper;
     }
 
     @Override
     public Single<ApiFeed> parseFeed(final InputStream inputStream, final String feedUrl) {
-        return Single.defer(() -> Single.just(EarlParser.parseOrThrow(inputStream, 0)))
+        return Single.defer(() -> Single.just(externalParserWrapper.parseOrThrow(inputStream, 0)))
                      .map(parsedFeed -> mapToApiFeed(parsedFeed, feedUrl));
     }
 
