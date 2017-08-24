@@ -24,7 +24,7 @@ public final class FeedServiceImpl implements FeedService {
             return feedParser.parseFeed(inputStream, feedUrl)
                              .doOnSuccess(feed -> closeStream(inputStream))
                              .doOnError(throwable -> closeStream(inputStream));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
             return Single.error(e);
         }
@@ -33,7 +33,7 @@ public final class FeedServiceImpl implements FeedService {
     private void closeStream(final InputStream inputStream) {
         try {
             inputStream.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

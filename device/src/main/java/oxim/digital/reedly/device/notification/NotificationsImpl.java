@@ -1,7 +1,6 @@
 package oxim.digital.reedly.device.notification;
 
 import android.app.Notification;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationManagerCompat;
 
@@ -9,8 +8,8 @@ public final class NotificationsImpl implements Notifications {
 
     private final NotificationManagerCompat notificationManagerCompat;
 
-    public NotificationsImpl(@NonNull final Context context) {
-        this.notificationManagerCompat = NotificationManagerCompat.from(context);
+    public NotificationsImpl(@NonNull final NotificationManagerCompat notificationManagerCompat) {
+        this.notificationManagerCompat = notificationManagerCompat;
     }
 
     @Override
