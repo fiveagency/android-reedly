@@ -25,7 +25,7 @@ public final class UnFavouriteArticleUseCaseTest {
     }
 
     @Test
-    public void executeWithoutErrorsInDependencies() throws Exception {
+    public void shouldRemoveAnArticleFromFavourites() throws Exception {
         Mockito.when(feedRepository.unFavouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
         unFavouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
@@ -34,18 +34,5 @@ public final class UnFavouriteArticleUseCaseTest {
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
-    }
-
-    @Test
-    public void executeUnFavouriteWithError() throws Exception {
-        Mockito.when(feedRepository.unFavouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
-
-        unFavouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).unFavouriteArticle(DomainTestData.TEST_INTEGER_ID_1);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
     }
 }

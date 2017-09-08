@@ -27,7 +27,7 @@ public final class GetUserFeedsUseCaseTest {
     }
 
     @Test
-    public void execute() throws Exception {
+    public void shouldReturnAllUserFeeds() throws Exception {
         final List<Feed> feeds = new ArrayList<>();
         feeds.add(DomainTestData.TEST_FEED);
 

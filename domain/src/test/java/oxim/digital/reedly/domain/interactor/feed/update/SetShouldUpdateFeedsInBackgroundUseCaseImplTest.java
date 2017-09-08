@@ -25,7 +25,7 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
     }
 
     @Test
-    public void executeEnable() throws Exception {
+    public void shouldSetToUpdateFeedsInBackground() throws Exception {
         Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(true)).thenReturn(Completable.complete());
 
         setShouldUpdateFeedsInBackgroundUseCase.execute(true).subscribe(testSubscriber);
@@ -37,7 +37,7 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
     }
 
     @Test
-    public void executeDisable() throws Exception {
+    public void shouldUnsetToUpdateFeedsInBackground() throws Exception {
         Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(false)).thenReturn(Completable.complete());
 
         setShouldUpdateFeedsInBackgroundUseCase.execute(false).subscribe(testSubscriber);
@@ -46,18 +46,5 @@ public final class SetShouldUpdateFeedsInBackgroundUseCaseImplTest {
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
-    }
-
-    @Test
-    public void executeEnableWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.setShouldUpdateFeedsInBackground(true)).thenReturn(Completable.error(new IOException()));
-
-        setShouldUpdateFeedsInBackgroundUseCase.execute(true).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).setShouldUpdateFeedsInBackground(true);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
     }
 }

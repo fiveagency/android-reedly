@@ -25,7 +25,11 @@ public final class DeleteFeedUseCaseTest {
     }
 
     @Test
-    public void executeDeleteSuccessful() throws Exception {
+    public void shouldDeleteExistingFeed() throws Exception {
+        deleteFeedSuccessfully();
+    }
+
+    private void deleteFeedSuccessfully() {
         Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
         deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
@@ -37,15 +41,7 @@ public final class DeleteFeedUseCaseTest {
     }
 
     @Test
-    public void executeWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
-
-        deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(DomainTestData.TEST_INTEGER_ID_1);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
+    public void shouldIgnoreDeletingNonExistingFeed() throws Exception {
+        deleteFeedSuccessfully();
     }
 }

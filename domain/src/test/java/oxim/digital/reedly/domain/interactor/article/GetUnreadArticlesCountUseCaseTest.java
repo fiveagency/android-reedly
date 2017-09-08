@@ -23,7 +23,7 @@ public final class GetUnreadArticlesCountUseCaseTest {
     }
 
     @Test
-    public void execute() throws Exception {
+    public void shouldReturnNumberOfUnreadArticlesForUser() throws Exception {
         Mockito.when(feedRepository.getUnreadArticlesCount()).thenReturn(Single.just(DomainTestData.TEST_LONG));
 
         getUnreadArticlesCountUseCase.execute().subscribe(testSubscriber);
@@ -34,4 +34,6 @@ public final class GetUnreadArticlesCountUseCaseTest {
         testSubscriber.assertValue(DomainTestData.TEST_LONG);
         testSubscriber.assertCompleted();
     }
+
+
 }

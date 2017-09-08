@@ -15,6 +15,6 @@ public final class UpdateFeedUseCase implements CompletableUseCaseWithParameter<
 
     @Override
     public Completable execute(final Feed feed) {
-        return feedRepository.updateArticles(feed);
+        return feedRepository.pullArticlesForFeedFromOrigin(feed);
     }
 }

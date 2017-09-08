@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import java.io.IOException;
 
 import oxim.digital.reedly.domain.interactor.DomainTestData;
-import oxim.digital.reedly.domain.model.Feed;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
 import rx.observers.TestSubscriber;
@@ -26,27 +25,16 @@ public final class UpdateFeedUseCaseTest {
     }
 
     @Test
-    public void executeUpdateSuccessfully() throws Exception {
-        Mockito.when(feedRepository.updateArticles(Mockito.any())).thenReturn(Completable.complete());
+    public void shouldUpdateFeedInRepository() throws Exception {
+        Mockito.when(feedRepository.pullArticlesForFeedFromOrigin(Mockito.any())).thenReturn(Completable.complete());
 
         updateFeedUseCase.execute(DomainTestData.TEST_FEED).subscribe(testSubscriber);
 
-        Mockito.verify(feedRepository, Mockito.times(1)).updateArticles(DomainTestData.TEST_FEED);
+        Mockito.verify(feedRepository, Mockito.times(1)).pullArticlesForFeedFromOrigin(DomainTestData.TEST_FEED);
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
     }
 
-    @Test
-    public void executeUpdateWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.updateArticles(Mockito.any())).thenReturn(Completable.error(new IOException()));
 
-        updateFeedUseCase.execute(DomainTestData.TEST_FEED).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).updateArticles(DomainTestData.TEST_FEED);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
-    }
 }

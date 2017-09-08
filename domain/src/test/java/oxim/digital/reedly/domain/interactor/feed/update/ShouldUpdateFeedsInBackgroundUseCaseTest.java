@@ -22,7 +22,7 @@ public final class ShouldUpdateFeedsInBackgroundUseCaseTest {
     }
 
     @Test
-    public void executeShouldUpdate() throws Exception {
+    public void shouldReturnInfoIfFeedsShouldUpdateInBackground() throws Exception {
         Mockito.when(feedRepository.shouldUpdateFeedsInBackground()).thenReturn(Single.just(true));
 
         shouldUpdateFeedsInBackgroundUseCase.execute().subscribe(testSubscriber);
@@ -35,7 +35,7 @@ public final class ShouldUpdateFeedsInBackgroundUseCaseTest {
     }
 
     @Test
-    public void executeShouldNotUpdate() throws Exception {
+    public void shouldReturnInfoIfFeedsShouldNotUpdateInBackground() throws Exception {
         Mockito.when(feedRepository.shouldUpdateFeedsInBackground()).thenReturn(Single.just(false));
 
         shouldUpdateFeedsInBackgroundUseCase.execute().subscribe(testSubscriber);

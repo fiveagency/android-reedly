@@ -25,7 +25,7 @@ public final class MarkArticleAsReadUseCaseTest {
     }
 
     @Test
-    public void executeMarkingAsCompletedSuccessful() throws Exception {
+    public void shouldMarkArticleAsRead() throws Exception {
         Mockito.when(feedRepository.markArticleAsRead(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
         markArticleAsReadUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
@@ -34,18 +34,5 @@ public final class MarkArticleAsReadUseCaseTest {
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
-    }
-
-    @Test
-    public void executeMarkingAsCompletedError() throws Exception {
-        Mockito.when(feedRepository.markArticleAsRead(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
-
-        markArticleAsReadUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).markArticleAsRead(DomainTestData.TEST_INTEGER_ID_1);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
     }
 }

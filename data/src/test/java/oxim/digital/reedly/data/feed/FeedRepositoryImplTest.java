@@ -2,7 +2,6 @@ package oxim.digital.reedly.data.feed;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ import rx.Single;
 import rx.observers.TestSubscriber;
 import rx.schedulers.Schedulers;
 
-public class FeedRepositoryImplTest {
+public final class FeedRepositoryImplTest {
 
     private FeedService feedService;
     private FeedDao feedDao;
@@ -43,7 +42,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void getUserFeeds() throws Exception {
+    public void shouldProvideAllUserFeeds() throws Exception {
         final List<Feed> feeds = new ArrayList<>();
         final Feed feed = new Feed(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
                                    DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1);
@@ -61,7 +60,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void getArticles() throws Exception {
+    public void shouldProvideAllArticlesForExistingFeed() throws Exception {
         final List<Article> articles = new ArrayList<>();
         final Article article = new Article(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_INTEGER_ID_2, DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_BASIC_URL_STRING,
                                             DataTestData.TEST_DATE_LONG, true, true);
@@ -79,7 +78,23 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void feedDoesExists() throws Exception {
+    public void shouldReturnEmptyArticlesListForNonExistentFeed() throws Exception {
+        final List<Article> emptyList = new ArrayList<>();
+
+        Mockito.when(feedDao.getArticlesForFeed(DataTestData.TEST_INTEGER_ID_1)).thenReturn(Single.just(emptyList));
+
+        final TestSubscriber<List<Article>> testSubscriber = new TestSubscriber<>();
+        feedRepositoryImpl.getArticles(DataTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
+
+        Mockito.verify(feedDao, Mockito.times(1)).getArticlesForFeed(DataTestData.TEST_INTEGER_ID_1);
+        Mockito.verifyNoMoreInteractions(feedDao);
+        testSubscriber.assertCompleted();
+
+        testSubscriber.assertValue(emptyList);
+    }
+
+    @Test
+    public void shouldReturnInfoAboutFeedExistingIfFeedExists() throws Exception {
         Mockito.when(feedDao.doesFeedExist(DataTestData.TEST_COMPLEX_URL_STRING_1)).thenReturn(Single.just(true));
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -93,7 +108,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void feedDoesntExists() throws Exception {
+    public void shouldReturnInfoAboutFeedNotExistingIfFeedDoesNotExists() throws Exception {
         Mockito.when(feedDao.doesFeedExist(DataTestData.TEST_COMPLEX_URL_STRING_1)).thenReturn(Single.just(false));
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -107,7 +122,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void createNewFeed() throws Exception {
+    public void shouldCreateNewValidFeed() throws Exception {
         final String feedUrl = DataTestData.TEST_COMPLEX_URL_STRING_1;
         final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_COMPLEX_URL_STRING_1,
                                             DataTestData.TEST_DESCRIPTION_STRING, feedUrl, new ArrayList<>());
@@ -126,7 +141,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void createNewFeedWhenServiceThrowsException() throws Exception {
+    public void shouldNotCreateInvalidFeed() throws Exception {
         final String feedUrl = DataTestData.TEST_COMPLEX_URL_STRING_1;
 
         Mockito.when(feedService.fetchFeed(feedUrl)).thenReturn(Single.error(new IOException()));
@@ -142,7 +157,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void deleteFeed() throws Exception {
+    public void shouldDeleteExistingFeed() throws Exception {
         final int feedId = DataTestData.TEST_INTEGER_ID_1;
 
         Mockito.when(feedDao.deleteFeed(feedId)).thenReturn(Completable.complete());
@@ -157,7 +172,22 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void updateArticles() throws Exception {
+    public void shouldIgnoreDeletingOfNonExistentFeed() throws Exception {
+        final int feedId = DataTestData.TEST_INTEGER_ID_1;
+
+        Mockito.when(feedDao.deleteFeed(feedId)).thenReturn(Completable.complete());
+
+        final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        feedRepositoryImpl.deleteFeed(feedId).subscribe(testSubscriber);
+
+        Mockito.verify(feedDao, Mockito.times(1)).deleteFeed(feedId);
+        Mockito.verifyNoMoreInteractions(feedDao);
+
+        testSubscriber.assertCompleted();
+    }
+
+    @Test
+    public void shouldUpdateFeedArticlesFromWeb() throws Exception {
         final int feedId = DataTestData.TEST_INTEGER_ID_1;
 
         final List<ApiArticle> apiArticles = new ArrayList<>();
@@ -174,7 +204,7 @@ public class FeedRepositoryImplTest {
         Mockito.when(feedService.fetchFeed(feed.url)).thenReturn(Single.just(apiFeed));
 
         final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-        feedRepositoryImpl.updateArticles(feed).subscribe(testSubscriber);
+        feedRepositoryImpl.pullArticlesForFeedFromOrigin(feed).subscribe(testSubscriber);
 
         Mockito.verify(feedDao, Mockito.times(1)).updateFeed(feedId, apiArticles);
         Mockito.verify(feedService, Mockito.times(1)).fetchFeed(feed.url);
@@ -184,7 +214,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void markArticleAsRead() throws Exception {
+    public void shouldMarkArticleAsRead() throws Exception {
         final int articleId = DataTestData.TEST_INTEGER_ID_1;
 
         Mockito.when(feedDao.markArticlesAsRead(articleId)).thenReturn(Completable.complete());
@@ -199,7 +229,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void favouriteArticle() throws Exception {
+    public void shouldMakeArticleFavourite() throws Exception {
         final int articleId = DataTestData.TEST_INTEGER_ID_1;
 
         Mockito.when(feedDao.favouriteArticle(articleId)).thenReturn(Completable.complete());
@@ -214,7 +244,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void unFavouriteArticle() throws Exception {
+    public void shouldRemoveArticleFromFavourites() throws Exception {
         final int articleId = DataTestData.TEST_INTEGER_ID_1;
 
         Mockito.when(feedDao.unFavouriteArticle(articleId)).thenReturn(Completable.complete());
@@ -229,7 +259,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void getUnreadArticlesCount() throws Exception {
+    public void shouldReturnNumberOfUnreadArticles() throws Exception {
         Mockito.when(feedDao.getUnreadArticlesCount()).thenReturn(Single.just(DataTestData.TEST_LONG));
 
         final TestSubscriber<Long> testSubscriber = new TestSubscriber<>();
@@ -243,7 +273,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void getFavouriteArticles() throws Exception {
+    public void shouldReturnFavouriteArticles() throws Exception {
         final List<Article> articles = new ArrayList<>();
         final Article article = new Article(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_INTEGER_ID_2, DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_BASIC_URL_STRING,
                                             DataTestData.TEST_DATE_LONG, true, true);
@@ -261,7 +291,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void shouldUpdateFeedsInBackgroundTrue() throws Exception {
+    public void shouldReturnInfoIfUpdateShouldOccurInBackground() throws Exception {
         Mockito.when(preferenceUtils.shouldUpdateFeedsInBackground()).thenReturn(true);
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -275,7 +305,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void shouldUpdateFeedsInBackgroundFalse() throws Exception {
+    public void shouldReturnInfoIfUpdateShouldNotOccurInBackground() throws Exception {
         Mockito.when(preferenceUtils.shouldUpdateFeedsInBackground()).thenReturn(false);
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -289,7 +319,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void setShouldUpdateFeedsInBackgroundTrue() throws Exception {
+    public void shouldSetToUpdateArticlesInTheBackground() throws Exception {
         final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         feedRepositoryImpl.setShouldUpdateFeedsInBackground(true).subscribe(testSubscriber);
 
@@ -300,7 +330,7 @@ public class FeedRepositoryImplTest {
     }
 
     @Test
-    public void setShouldUpdateFeedsInBackgroundFalse() throws Exception {
+    public void shouldSetNotToUpdateArticlesInTheBackground() throws Exception {
         final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         feedRepositoryImpl.setShouldUpdateFeedsInBackground(false).subscribe(testSubscriber);
 
