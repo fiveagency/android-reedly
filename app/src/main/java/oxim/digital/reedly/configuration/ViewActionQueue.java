@@ -11,7 +11,7 @@ import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
-public final class ViewActionQueue<View> {
+public final class ViewActionQueue<View> implements ViewActionHandler<View> {
 
     private final LinkedList<Action1<View>> viewActions = new LinkedList<>();
     private final Object queueLock = new Object();
@@ -27,14 +27,17 @@ public final class ViewActionQueue<View> {
 
     private boolean isPaused;
 
+    @Override
     public void subscribeTo(final Observable<Action1<View>> observable, final Action1<View> onCompleteAction, final Action1<Throwable> errorAction) {
         subscriptions.add(observable.observeOn(observeScheduler).subscribe(this::onResult, errorAction::call, () -> onResult(onCompleteAction)));
     }
 
+    @Override
     public void subscribeTo(final Single<Action1<View>> single, final Action1<Throwable> errorAction) {
         subscriptions.add(single.observeOn(observeScheduler).subscribe(this::onResult, errorAction::call));
     }
 
+    @Override
     public void subscribeTo(final Completable completable, final Action1<View> onCompleteAction, final Action1<Throwable> errorAction) {
         subscriptions.add(completable.observeOn(observeScheduler).subscribe(() -> onResult(onCompleteAction), errorAction::call));
     }
@@ -49,15 +52,18 @@ public final class ViewActionQueue<View> {
         }
     }
 
+    @Override
     public void pause() {
         isPaused = true;
     }
 
+    @Override
     public void resume() {
         isPaused = false;
         consumeQueue();
     }
 
+    @Override
     public void destroy() {
         subscriptions.unsubscribe();
         viewActionSubject.onCompleted();
@@ -74,6 +80,7 @@ public final class ViewActionQueue<View> {
         }
     }
 
+    @Override
     public Observable<Action1<View>> viewActionsObservable() {
         return viewActionSubject;
     }

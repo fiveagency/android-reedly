@@ -39,13 +39,13 @@ public final class DataModule {
     @Provides
     @Singleton
     FeedParser provideFeedParser(final CurrentTimeProvider currentTimeProvider, final ExternalParserWrapper externalParserWrapper) {
-        return new FeedParserImpl(currentTimeProvider, externalParserWrapper);
+        return new FeedParserImpl(externalParserWrapper);
     }
 
     @Provides
     @Singleton
-    ExternalParserWrapper provideExternalParserWrapper(){
-        return new EarlParserWrapper();
+    ExternalParserWrapper provideExternalParserWrapper(final CurrentTimeProvider currentTimeProvider) {
+        return new EarlParserWrapper(currentTimeProvider);
     }
 
     @Provides
