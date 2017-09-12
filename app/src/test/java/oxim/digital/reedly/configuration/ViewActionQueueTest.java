@@ -51,7 +51,7 @@ public final class ViewActionQueueTest {
     }
 
     @Test
-    public void shouldBeAbleToDestroyItselfAndComplete() throws Exception {
+    public void shouldBeAbleToDestroyItselfAndUnSubscribeSubscribers() throws Exception {
         viewActionQueue.destroy();
         testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
