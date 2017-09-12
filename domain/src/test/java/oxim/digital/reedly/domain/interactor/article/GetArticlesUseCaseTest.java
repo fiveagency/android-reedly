@@ -43,7 +43,7 @@ public final class GetArticlesUseCaseTest {
     }
 
     @Test
-    public void shouldReturnEmptyListIfUsersHasNoArticles() throws Exception {
+    public void shouldReturnEmptyListIfUserHasNoArticles() throws Exception {
         final List<Article> articles = new ArrayList<>(0);
 
         Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Single.just(articles));
