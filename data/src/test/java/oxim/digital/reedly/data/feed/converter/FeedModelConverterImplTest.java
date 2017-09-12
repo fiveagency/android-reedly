@@ -24,35 +24,7 @@ public final class FeedModelConverterImplTest {
     }
 
     @Test
-    public void FeedModelToDomain() throws Exception {
-        final FeedModel feedModel = new FeedModel(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
-                                                  DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1);
-        final Feed feed = feedModelConverterImpl.modelToDomain(feedModel);
-
-        Assert.assertEquals(DataTestData.TEST_DESCRIPTION_STRING, feed.description);
-        Assert.assertEquals(DataTestData.TEST_INTEGER_ID_1, feed.id);
-        Assert.assertEquals(DataTestData.TEST_IMAGE_URL, feed.imageUrl);
-        Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, feed.pageLink);
-        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, feed.title);
-        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, feed.url);
-    }
-
-    @Test
-    public void ArticleModelToDomainDefault() throws Exception {
-        final ArticleModel articleModel = new ArticleModel(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1,
-                                                           DataTestData.TEST_COMPLEX_URL_STRING_1, DataTestData.TEST_LONG);
-        final Article article = feedModelConverterImpl.modelToDomain(articleModel);
-
-        Assert.assertEquals(DataTestData.TEST_INTEGER_ID_1, article.feedId);
-        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, article.title);
-        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, article.link);
-        Assert.assertEquals(DataTestData.TEST_LONG, article.publicationDate);
-        Assert.assertEquals(true, article.isNew);
-        Assert.assertEquals(false, article.isFavourite);
-    }
-
-    @Test
-    public void ArticleModelToDomainNonNewFavourite() throws Exception {
+    public void shouldMapArticleModelToDomainModel() throws Exception {
         final ArticleModel articleModel = new ArticleModel(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1,
                                                            DataTestData.TEST_COMPLEX_URL_STRING_1, DataTestData.TEST_LONG, false, true);
         final Article article = feedModelConverterImpl.modelToDomain(articleModel);
@@ -66,20 +38,35 @@ public final class FeedModelConverterImplTest {
     }
 
     @Test
-    public void FeedApiToModelWithoutSlashAtTheEndOfTheImageUrl() throws Exception {
-        final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
-                                            DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1, new ArrayList<>());
-        final FeedModel feedModel = feedModelConverterImpl.apiToModel(apiFeed);
+    public void shouldMapArticleModelToNewAndNotFavouriteDomainArticleIfNotSetDifferently() throws Exception {
+        final ArticleModel articleModel = new ArticleModel(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1,
+                                                           DataTestData.TEST_COMPLEX_URL_STRING_1, DataTestData.TEST_LONG);
+        final Article article = feedModelConverterImpl.modelToDomain(articleModel);
 
-        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, feedModel.getTitle());
-        Assert.assertEquals(DataTestData.TEST_IMAGE_URL, feedModel.getImageUrl());
-        Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, feedModel.getPageLink());
-        Assert.assertEquals(DataTestData.TEST_DESCRIPTION_STRING, feedModel.getDescription());
-        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, feedModel.getUrl());
+        Assert.assertEquals(DataTestData.TEST_INTEGER_ID_1, article.feedId);
+        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, article.title);
+        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, article.link);
+        Assert.assertEquals(DataTestData.TEST_LONG, article.publicationDate);
+        Assert.assertEquals(true, article.isNew);
+        Assert.assertEquals(false, article.isFavourite);
     }
 
     @Test
-    public void FeedApiToModelWithSlashAtTheEndOfTheImageUrl() throws Exception {
+    public void shouldMapFeedModelToDomainModel() throws Exception {
+        final FeedModel feedModel = new FeedModel(DataTestData.TEST_INTEGER_ID_1, DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
+                                                  DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1);
+        final Feed feed = feedModelConverterImpl.modelToDomain(feedModel);
+
+        Assert.assertEquals(DataTestData.TEST_DESCRIPTION_STRING, feed.description);
+        Assert.assertEquals(DataTestData.TEST_INTEGER_ID_1, feed.id);
+        Assert.assertEquals(DataTestData.TEST_IMAGE_URL, feed.imageUrl);
+        Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, feed.pageLink);
+        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, feed.title);
+        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, feed.url);
+    }
+
+    @Test
+    public void shouldMapFeedApiToModelWithSlashAtTheEndOfTheImageUrl() throws Exception {
         final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL_SLASH_AT_THE_END, DataTestData.TEST_BASIC_URL_STRING,
                                             DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1, new ArrayList<>());
         final FeedModel feedModel = feedModelConverterImpl.apiToModel(apiFeed);
@@ -92,7 +79,20 @@ public final class FeedModelConverterImplTest {
     }
 
     @Test
-    public void ArticleApiToModel() throws Exception {
+    public void shouldMapFeedApiToModelWithoutSlashAtTheEndOfTheImageUrl() throws Exception {
+        final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
+                                            DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_COMPLEX_URL_STRING_1, new ArrayList<>());
+        final FeedModel feedModel = feedModelConverterImpl.apiToModel(apiFeed);
+
+        Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, feedModel.getTitle());
+        Assert.assertEquals(DataTestData.TEST_IMAGE_URL, feedModel.getImageUrl());
+        Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, feedModel.getPageLink());
+        Assert.assertEquals(DataTestData.TEST_DESCRIPTION_STRING, feedModel.getDescription());
+        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, feedModel.getUrl());
+    }
+
+    @Test
+    public void shouldMapArticleApiToModel() throws Exception {
         final ApiArticle apiArticle = new ApiArticle(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_COMPLEX_URL_STRING_1, DataTestData.TEST_LONG);
 
         final ArticleModel articleModel = feedModelConverterImpl.apiToModel(apiArticle, DataTestData.TEST_INTEGER_ID_1);

@@ -60,7 +60,7 @@ public final class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Completable updateArticles(final Feed feed) {
+    public Completable pullArticlesForFeedFromOrigin(final Feed feed) {
         return Completable.defer(() -> feedService.fetchFeed(feed.url)
                                                   .flatMapCompletable(apiFeed -> feedDao.updateFeed(feed.id, apiFeed.articles)))
                           .subscribeOn(backgroundScheduler);

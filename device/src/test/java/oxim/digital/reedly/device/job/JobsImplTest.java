@@ -25,12 +25,12 @@ public final class JobsImplTest {
     }
 
     @Test
-    public void scheduleWhenJobSchedulerReturnsSuccess() throws Exception {
+    public void shouldReturnSuccessWhenJobIsScheduled() throws Exception {
         testScheduleWhenJobSchedulerReturnsResult(JobScheduler.RESULT_SUCCESS);
     }
 
     @Test
-    public void scheduleWhenJobSchedulerReturnsFailure() throws Exception {
+    public void shouldReturnFailureWhenJobCannotBeScheduled() throws Exception {
         testScheduleWhenJobSchedulerReturnsResult(JobScheduler.RESULT_FAILURE);
     }
 
@@ -46,7 +46,7 @@ public final class JobsImplTest {
     }
 
     @Test
-    public void cancel() throws Exception {
+    public void shouldCancelExistingJob() throws Exception {
         jobsImpl.cancel(DeviceTestData.TEST_INTEGER);
 
         Mockito.verify(jobScheduler, Mockito.times(1)).cancel(DeviceTestData.TEST_INTEGER);

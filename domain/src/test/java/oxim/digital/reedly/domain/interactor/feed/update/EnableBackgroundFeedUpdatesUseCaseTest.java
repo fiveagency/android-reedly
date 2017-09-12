@@ -28,23 +28,7 @@ public final class EnableBackgroundFeedUpdatesUseCaseTest {
     }
 
     @Test
-    public void executeWithErrorInSetShouldUpdateFeedsInBackgroundUseCase() throws Exception {
-        Mockito.when(setShouldUpdateFeedsInBackgroundUseCaseMock.execute(true)).thenReturn(Completable.error(new IOException()));
-
-        enableBackgroundFeedUpdatesUseCase.execute().subscribe(testSubscriber);
-
-        Mockito.verify(setShouldUpdateFeedsInBackgroundUseCaseMock, Mockito.times(1)).execute(true);
-        Mockito.verifyNoMoreInteractions(setShouldUpdateFeedsInBackgroundUseCaseMock);
-
-        Mockito.verify(feedUpdateScheduler, Mockito.times(0)).scheduleBackgroundFeedUpdates();
-        Mockito.verifyNoMoreInteractions(feedUpdateScheduler);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
-    }
-
-    @Test
-    public void executeWithoutErrorsInDependencies() throws Exception {
+    public void shouldEnableBackgroundFeedUpdates() throws Exception {
         Mockito.when(setShouldUpdateFeedsInBackgroundUseCaseMock.execute(true)).thenReturn(Completable.complete());
 
         enableBackgroundFeedUpdatesUseCase.execute().subscribe(testSubscriber);

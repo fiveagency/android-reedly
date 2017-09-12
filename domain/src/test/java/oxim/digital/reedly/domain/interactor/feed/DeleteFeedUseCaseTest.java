@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
-
 import oxim.digital.reedly.domain.interactor.DomainTestData;
 import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
@@ -25,7 +23,16 @@ public final class DeleteFeedUseCaseTest {
     }
 
     @Test
-    public void executeDeleteSuccessful() throws Exception {
+    public void shouldDeleteExistingFeed() throws Exception {
+        tryToDeleteFeed();
+    }
+
+    @Test
+    public void shouldIgnoreDeletingNonExistingFeed() throws Exception {
+        tryToDeleteFeed();
+    }
+
+    private void tryToDeleteFeed() {
         Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
         deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
@@ -34,18 +41,5 @@ public final class DeleteFeedUseCaseTest {
         Mockito.verifyNoMoreInteractions(feedRepository);
 
         testSubscriber.assertCompleted();
-    }
-
-    @Test
-    public void executeWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.deleteFeed(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
-
-        deleteFeedUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).deleteFeed(DomainTestData.TEST_INTEGER_ID_1);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
     }
 }

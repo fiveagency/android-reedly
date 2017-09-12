@@ -26,7 +26,7 @@ public final class FavouriteArticleUseCaseTest {
     }
 
     @Test
-    public void executeWithoutErrorsInDependencies() throws Exception {
+    public void shouldMakeAnArticleFavourite() throws Exception {
         Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.complete());
 
         favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
@@ -37,16 +37,5 @@ public final class FavouriteArticleUseCaseTest {
         testSubscriber.assertCompleted();
     }
 
-    @Test
-    public void executeFavouriteWithErrorInRepository() throws Exception {
-        Mockito.when(feedRepository.favouriteArticle(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Completable.error(new IOException()));
 
-        favouriteArticleUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
-
-        Mockito.verify(feedRepository, Mockito.times(1)).favouriteArticle(DomainTestData.TEST_INTEGER_ID_1);
-        Mockito.verifyNoMoreInteractions(feedRepository);
-
-        testSubscriber.assertNotCompleted();
-        testSubscriber.assertError(IOException.class);
-    }
 }

@@ -27,11 +27,26 @@ public final class GetFavouriteArticlesUseCaseTest {
     }
 
     @Test
-    public void execute() throws Exception {
+    public void shouldReturnListOfFavouriteArticles() throws Exception {
         final List<Article> articleList = new ArrayList<>(3);
         articleList.add(DomainTestData.TEST_NEW_FAVOURITE_ARTICLE);
         articleList.add(DomainTestData.TEST_NEW_FAVOURITE_ARTICLE);
         articleList.add(DomainTestData.TEST_NEW_FAVOURITE_ARTICLE);
+
+        Mockito.when(feedRepository.getFavouriteArticles()).thenReturn(Single.just(articleList));
+
+        getFavouriteArticlesUseCase.execute().subscribe(testSubscriber);
+
+        Mockito.verify(feedRepository, Mockito.times(1)).getFavouriteArticles();
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(articleList);
+    }
+
+    @Test
+    public void shouldReturnEmptyListIfUserHasNoFavouriteArticles() throws Exception {
+        final List<Article> articleList = new ArrayList<>(0);
 
         Mockito.when(feedRepository.getFavouriteArticles()).thenReturn(Single.just(articleList));
 

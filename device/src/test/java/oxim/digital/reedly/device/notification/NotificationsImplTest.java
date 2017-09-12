@@ -23,7 +23,7 @@ public final class NotificationsImplTest {
     }
 
     @Test
-    public void showNotification() throws Exception {
+    public void shouldShowNewNotification() throws Exception {
         notificationsImpl.showNotification(DeviceTestData.TEST_INTEGER, notification);
 
         Mockito.verify(notificationManagerCompat, Mockito.times(1)).notify(DeviceTestData.TEST_INTEGER, notification);
@@ -31,7 +31,7 @@ public final class NotificationsImplTest {
     }
 
     @Test
-    public void updateNotification() throws Exception {
+    public void shouldUpdateExistingNotification() throws Exception {
         notificationsImpl.updateNotification(DeviceTestData.TEST_INTEGER, notification);
 
         Mockito.verify(notificationManagerCompat, Mockito.times(1)).notify(DeviceTestData.TEST_INTEGER, notification);
@@ -39,7 +39,7 @@ public final class NotificationsImplTest {
     }
 
     @Test
-    public void hideNotification() throws Exception {
+    public void shouldHideExistingNotification() throws Exception {
         notificationsImpl.hideNotification(DeviceTestData.TEST_INTEGER);
 
         Mockito.verify(notificationManagerCompat, Mockito.times(1)).cancel(DeviceTestData.TEST_INTEGER);
@@ -47,7 +47,7 @@ public final class NotificationsImplTest {
     }
 
     @Test
-    public void hideNotifications() throws Exception {
+    public void shouldHideAllNotifications() throws Exception {
         notificationsImpl.hideNotifications();
 
         Mockito.verify(notificationManagerCompat, Mockito.times(1)).cancelAll();

@@ -27,9 +27,24 @@ public final class GetArticlesUseCaseTest {
     }
 
     @Test
-    public void execute() throws Exception {
-        final List<Article> articles = new ArrayList<>();
+    public void shouldReturnUsersListOfArticles() throws Exception {
+        final List<Article> articles = new ArrayList<>(1);
         articles.add(DomainTestData.TEST_NEW_FAVOURITE_ARTICLE);
+
+        Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Single.just(articles));
+
+        getArticlesUseCase.execute(DomainTestData.TEST_INTEGER_ID_1).subscribe(testSubscriber);
+
+        Mockito.verify(feedRepository, Mockito.times(1)).getArticles(DomainTestData.TEST_INTEGER_ID_1);
+        Mockito.verifyNoMoreInteractions(feedRepository);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(articles);
+    }
+
+    @Test
+    public void shouldReturnEmptyListIfUserHasNoArticles() throws Exception {
+        final List<Article> articles = new ArrayList<>(0);
 
         Mockito.when(feedRepository.getArticles(DomainTestData.TEST_INTEGER_ID_1)).thenReturn(Single.just(articles));
 
