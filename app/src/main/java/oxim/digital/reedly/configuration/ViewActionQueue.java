@@ -84,4 +84,44 @@ public final class ViewActionQueue<View> implements ViewActionHandler<View> {
     public Observable<Action1<View>> viewActionsObservable() {
         return viewActionSubject;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final ViewActionQueue<?> that = (ViewActionQueue<?>) o;
+
+        if (isPaused != that.isPaused) {
+            return false;
+        }
+        if (viewActions != null ? !viewActions.equals(that.viewActions) : that.viewActions != null) {
+            return false;
+        }
+        if (queueLock != null ? !queueLock.equals(that.queueLock) : that.queueLock != null) {
+            return false;
+        }
+        if (viewActionSubject != null ? !viewActionSubject.equals(that.viewActionSubject) : that.viewActionSubject != null) {
+            return false;
+        }
+        if (subscriptions != null ? !subscriptions.equals(that.subscriptions) : that.subscriptions != null) {
+            return false;
+        }
+        return observeScheduler != null ? observeScheduler.equals(that.observeScheduler) : that.observeScheduler == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = viewActions != null ? viewActions.hashCode() : 0;
+        result = 31 * result + (queueLock != null ? queueLock.hashCode() : 0);
+        result = 31 * result + (viewActionSubject != null ? viewActionSubject.hashCode() : 0);
+        result = 31 * result + (subscriptions != null ? subscriptions.hashCode() : 0);
+        result = 31 * result + (observeScheduler != null ? observeScheduler.hashCode() : 0);
+        result = 31 * result + (isPaused ? 1 : 0);
+        return result;
+    }
 }

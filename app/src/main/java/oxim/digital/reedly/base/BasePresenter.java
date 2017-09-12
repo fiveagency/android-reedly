@@ -38,6 +38,10 @@ public abstract class BasePresenter<View extends BaseView> implements ScopedPres
     @Named(ThreadingModule.MAIN_SCHEDULER)
     Scheduler mainThreadScheduler;
 
+    @Inject
+    @Named(ThreadingModule.BACKGROUND_SCHEDULER)
+    Scheduler backgroundThread;
+
     private WeakReference<View> viewReference = new WeakReference<>(null);
     private Subscription viewActionsSubscription;
 
@@ -111,7 +115,7 @@ public abstract class BasePresenter<View extends BaseView> implements ScopedPres
 
     protected final void doIfConnectedToInternet(final Action0 ifConnected, final Action0 ifNotConnected) {
         addSubscription(connectivityReceiver.isConnected()
-                                            .subscribeOn(Schedulers.io())
+                                            .subscribeOn(backgroundThread)
                                             .observeOn(mainThreadScheduler)
                                             .subscribe(isConnected -> onConnectedToInternet(isConnected, ifConnected, ifNotConnected), this::logError)
         );

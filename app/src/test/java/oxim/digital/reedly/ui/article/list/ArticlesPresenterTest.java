@@ -24,10 +24,12 @@ import oxim.digital.reedly.domain.interactor.article.favourite.FavouriteArticleU
 import oxim.digital.reedly.domain.interactor.article.favourite.GetFavouriteArticlesUseCase;
 import oxim.digital.reedly.domain.interactor.article.favourite.UnFavouriteArticleUseCase;
 import oxim.digital.reedly.domain.model.Article;
+import oxim.digital.reedly.ui.feed.create.NewFeedSubscriptionContract;
 import oxim.digital.reedly.ui.mapper.FeedViewModeMapper;
 import oxim.digital.reedly.ui.model.ArticleViewModel;
 import oxim.digital.reedly.ui.router.Router;
 import rx.Completable;
+import rx.Observable;
 import rx.Scheduler;
 import rx.Single;
 import rx.schedulers.Schedulers;
