@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import oxim.digital.reedly.AppTestData;
-import oxim.digital.reedly.MockViewActionHandler;
+import oxim.digital.reedly.MockViewActionQueue;
 import oxim.digital.reedly.configuration.ViewActionQueueProvider;
 import oxim.digital.reedly.data.util.connectivity.ConnectivityReceiver;
 import oxim.digital.reedly.domain.interactor.feed.AddNewFeedUseCase;
@@ -57,7 +57,7 @@ public final class NewFeedSubscriptionPresenterTest {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectivityReceiver.getConnectivityStatus()).thenReturn(Observable.just(true));
-        Mockito.when(viewActionQueueProvider.queueFor(Mockito.any())).thenReturn(new MockViewActionHandler<NewFeedSubscriptionContract.View>());
+        Mockito.when(viewActionQueueProvider.queueFor(Mockito.any())).thenReturn(new MockViewActionQueue<NewFeedSubscriptionContract.View>());
 
         newFeedSubscriptionPresenter.start();
         newFeedSubscriptionPresenter.activate();

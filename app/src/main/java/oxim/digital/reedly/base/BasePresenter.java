@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import oxim.digital.reedly.configuration.ViewActionHandler;
+import oxim.digital.reedly.configuration.ViewActionQueue;
 import oxim.digital.reedly.configuration.ViewActionQueueProvider;
 import oxim.digital.reedly.dagger.application.module.ThreadingModule;
 import oxim.digital.reedly.data.util.connectivity.ConnectivityReceiver;
@@ -46,7 +46,7 @@ public abstract class BasePresenter<View extends BaseView> implements ScopedPres
     private Subscription viewActionsSubscription;
 
     protected String viewId;
-    protected ViewActionHandler<View> viewActionQueue;
+    protected ViewActionQueue<View> viewActionQueue;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 

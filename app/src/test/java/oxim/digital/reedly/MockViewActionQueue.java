@@ -1,6 +1,6 @@
 package oxim.digital.reedly;
 
-import oxim.digital.reedly.configuration.ViewActionHandler;
+import oxim.digital.reedly.configuration.ViewActionQueue;
 import rx.Completable;
 import rx.Observable;
 import rx.Scheduler;
@@ -9,7 +9,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
-public final class MockViewActionHandler<View> implements ViewActionHandler<View> {
+public final class MockViewActionQueue<View> implements ViewActionQueue<View> {
 
     private final PublishSubject<Action1<View>> subject = PublishSubject.create();
     private final Scheduler scheduler = Schedulers.immediate();

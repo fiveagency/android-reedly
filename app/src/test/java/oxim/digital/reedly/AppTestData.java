@@ -8,6 +8,6 @@ public final class AppTestData {
     public static final String TEST_LINK = "http://com.com/";
     public static final long TEST_LONG_DATE = 1024l;
 
-    public static final String TEST_STRING_ID = "sakfjsi";
-    public static final String TEST_STRING_ID_2 = "fasfag";
+    public static final String TEST_STRING_ID = "test_id_1";
+    public static final String TEST_STRING_ID_2 = "test_id_2";
 }

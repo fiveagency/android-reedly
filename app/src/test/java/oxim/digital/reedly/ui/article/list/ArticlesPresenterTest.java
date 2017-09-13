@@ -12,29 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oxim.digital.reedly.AppTestData;
-import oxim.digital.reedly.MockViewActionHandler;
-import oxim.digital.reedly.configuration.ViewActionHandler;
-import oxim.digital.reedly.configuration.ViewActionQueue;
-import oxim.digital.reedly.configuration.ViewActionQueueProvider;
-import oxim.digital.reedly.dagger.application.module.ThreadingModule;
-import oxim.digital.reedly.data.util.connectivity.ConnectivityReceiver;
+import oxim.digital.reedly.MockViewActionQueue;
 import oxim.digital.reedly.domain.interactor.article.GetArticlesUseCase;
 import oxim.digital.reedly.domain.interactor.article.MarkArticleAsReadUseCase;
 import oxim.digital.reedly.domain.interactor.article.favourite.FavouriteArticleUseCase;
 import oxim.digital.reedly.domain.interactor.article.favourite.GetFavouriteArticlesUseCase;
 import oxim.digital.reedly.domain.interactor.article.favourite.UnFavouriteArticleUseCase;
 import oxim.digital.reedly.domain.model.Article;
-import oxim.digital.reedly.ui.feed.create.NewFeedSubscriptionContract;
 import oxim.digital.reedly.ui.mapper.FeedViewModeMapper;
 import oxim.digital.reedly.ui.model.ArticleViewModel;
 import oxim.digital.reedly.ui.router.Router;
 import rx.Completable;
-import rx.Observable;
 import rx.Scheduler;
 import rx.Single;
 import rx.schedulers.Schedulers;
-
-import static org.junit.Assert.*;
 
 public final class ArticlesPresenterTest {
 
@@ -63,7 +54,7 @@ public final class ArticlesPresenterTest {
     Scheduler mainThreadScheduler = Schedulers.immediate();
 
     @Spy
-    MockViewActionHandler mockViewActionHandler;
+    MockViewActionQueue mockViewActionHandler;
 
     @InjectMocks
     ArticlesPresenter articlesPresenter;

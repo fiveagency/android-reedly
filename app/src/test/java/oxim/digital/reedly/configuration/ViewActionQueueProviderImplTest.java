@@ -3,7 +3,6 @@ package oxim.digital.reedly.configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import oxim.digital.reedly.AppTestData;
 import rx.schedulers.Schedulers;
@@ -19,9 +18,9 @@ public final class ViewActionQueueProviderImplTest {
 
     @Test
     public void shouldReturnSameQueueForSameId() throws Exception {
-        final ViewActionQueue firstQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
-        final ViewActionQueue secondQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
-        final ViewActionQueue thirdQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID_2);
+        final ViewActionQueueImpl firstQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
+        final ViewActionQueueImpl secondQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
+        final ViewActionQueueImpl thirdQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID_2);
 
         Assert.assertEquals(firstQueue, secondQueue);
         Assert.assertNotEquals(firstQueue, thirdQueue);
@@ -30,10 +29,10 @@ public final class ViewActionQueueProviderImplTest {
 
     @Test
     public void shouldRemoveQueue() throws Exception {
-        final ViewActionQueue firstQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
+        final ViewActionQueueImpl firstQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
         viewActionQueueProvider.dispose(AppTestData.TEST_STRING_ID);
 
-        final ViewActionQueue secondQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
+        final ViewActionQueueImpl secondQueue = viewActionQueueProvider.queueFor(AppTestData.TEST_STRING_ID);
 
         Assert.assertNotEquals(firstQueue, secondQueue);
     }

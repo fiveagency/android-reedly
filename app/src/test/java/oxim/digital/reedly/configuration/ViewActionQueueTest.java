@@ -5,18 +5,19 @@ import org.junit.Test;
 
 import oxim.digital.reedly.base.BaseView;
 import rx.Completable;
+import rx.Observable;
 import rx.Single;
 import rx.observers.TestSubscriber;
 import rx.schedulers.Schedulers;
 
 public final class ViewActionQueueTest {
 
-    private ViewActionQueue<BaseView> viewActionQueue;
+    private ViewActionQueueImpl<BaseView> viewActionQueue;
     private TestSubscriber<Object> testSubscriber;
 
     @Before
     public void setUp() throws Exception {
-        viewActionQueue = new ViewActionQueue<>(Schedulers.immediate());
+        viewActionQueue = new ViewActionQueueImpl<>(Schedulers.immediate());
         testSubscriber = TestSubscriber.create();
         viewActionQueue.viewActionsObservable()
                        .subscribeOn(Schedulers.immediate())
@@ -31,10 +32,10 @@ public final class ViewActionQueueTest {
         viewActionQueue.subscribeTo(Completable.complete(), view -> {}, throwable -> {});
         testSubscriber.assertValueCount(1);
 
-        viewActionQueue.subscribeTo(Single.just(view -> { }), throwable -> {});
+        viewActionQueue.subscribeTo(Single.just(view -> {}), throwable -> {});
         testSubscriber.assertValueCount(2);
 
-        viewActionQueue.subscribeTo(rx.Observable.just(view -> { }), view -> {}, throwable -> {});
+        viewActionQueue.subscribeTo(Observable.just(view -> {}), view -> {}, throwable -> {});
         //on next and completed
         testSubscriber.assertValueCount(4);
     }

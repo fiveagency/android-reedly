@@ -21,7 +21,7 @@ public final class ViewActionQueueProviderImpl implements ViewActionQueueProvide
             return viewActionQueue;
         }
 
-        final ViewActionQueue newQueue = new ViewActionQueue(mainScheduler);
+        final ViewActionQueue newQueue = new ViewActionQueueImpl(mainScheduler);
         viewActionQueueMap.put(queueId, newQueue);
         return newQueue;
     }
