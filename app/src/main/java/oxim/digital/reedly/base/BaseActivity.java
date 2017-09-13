@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import oxim.digital.reedly.configuration.RandomViewIdGenerator;
 import oxim.digital.reedly.configuration.ViewIdGenerator;
 import oxim.digital.reedly.dagger.activity.DaggerActivity;
 import oxim.digital.reedly.domain.util.ActionRouter;

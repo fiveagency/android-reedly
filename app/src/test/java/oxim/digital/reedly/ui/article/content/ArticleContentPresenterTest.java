@@ -8,6 +8,6 @@ public final class ArticleContentPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-
+        // view is webview. this presenter is John Snow. It knows nothing
     }
 }
