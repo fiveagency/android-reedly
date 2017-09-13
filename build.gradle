@@ -29,6 +29,7 @@ allprojects {
         rxAndroidVersion = "1.2.1"
         streamsVersion = "1.1.7"
         retrolambdaVersion = "3.2.5"
+        mockitoVersion = "2.8.9"
     }
 }
 

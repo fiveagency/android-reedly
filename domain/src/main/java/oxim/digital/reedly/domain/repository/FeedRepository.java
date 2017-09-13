@@ -19,7 +19,7 @@ public interface FeedRepository {
 
     Completable deleteFeed(int feedId);
 
-    Completable updateArticles(Feed feed);
+    Completable pullArticlesForFeedFromOrigin(Feed feed);
 
     Completable markArticleAsRead(int articleId);
 

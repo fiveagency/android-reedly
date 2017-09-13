@@ -11,7 +11,6 @@ import oxim.digital.reedly.domain.repository.FeedRepository;
 import rx.Completable;
 import rx.Scheduler;
 import rx.Single;
-import rx.schedulers.Schedulers;
 
 public final class FeedRepositoryImpl implements FeedRepository {
 
@@ -32,7 +31,7 @@ public final class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Single<List<Feed>> getUserFeeds() {
         return Single.defer(feedDao::getAllFeeds)
-                     .subscribeOn(Schedulers.io());
+                     .subscribeOn(backgroundScheduler);
     }
 
     @Override
@@ -61,7 +60,7 @@ public final class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Completable updateArticles(final Feed feed) {
+    public Completable pullArticlesForFeedFromOrigin(final Feed feed) {
         return Completable.defer(() -> feedService.fetchFeed(feed.url)
                                                   .flatMapCompletable(apiFeed -> feedDao.updateFeed(feed.id, apiFeed.articles)))
                           .subscribeOn(backgroundScheduler);
