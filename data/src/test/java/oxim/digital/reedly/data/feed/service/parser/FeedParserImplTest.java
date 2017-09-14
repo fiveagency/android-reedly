@@ -37,7 +37,7 @@ public final class FeedParserImplTest {
         final ApiArticle firstItem = new ApiArticle(DataTestData.TEST_STRING_TITLE_2, DataTestData.TEST_COMPLEX_URL_STRING_2, DataTestData.TEST_DATE_LONG);
         items.add(firstItem);
 
-        final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_BASIC_URL_STRING, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
+        final ApiFeed apiFeed = new ApiFeed(DataTestData.TEST_STRING_TITLE_1, DataTestData.TEST_IMAGE_URL, DataTestData.TEST_BASIC_URL_STRING,
                                             DataTestData.TEST_DESCRIPTION_STRING, DataTestData.TEST_BASIC_URL_STRING, items);
 
         Mockito.when(externalParserWrapper.parseOrThrow(Mockito.eq(inputStream), Mockito.anyString())).thenReturn(apiFeed);
@@ -53,7 +53,7 @@ public final class FeedParserImplTest {
         Assert.assertEquals(DataTestData.TEST_STRING_TITLE_1, result.title);
         Assert.assertEquals(DataTestData.TEST_IMAGE_URL, result.imageUrl);
         Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, result.pageLink);
-        Assert.assertEquals(DataTestData.TEST_COMPLEX_URL_STRING_1, result.url);
+        Assert.assertEquals(DataTestData.TEST_BASIC_URL_STRING, result.url);
 
         Assert.assertEquals(1, result.articles.size());
         final ApiArticle apiArticleResult = result.articles.get(0);

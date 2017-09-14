@@ -70,6 +70,9 @@ public final class UserSubscriptionsPresenterTest {
     @Spy
     Scheduler backgroundThread = Schedulers.immediate();
 
+    @Spy
+    MockViewActionQueue mockViewActionHandler;
+
     @InjectMocks
     UserSubscriptionsPresenter userSubscriptionsPresenter;
 
@@ -94,14 +97,13 @@ public final class UserSubscriptionsPresenterTest {
         feedList.add(feed);
 
         Mockito.when(getUserFeedsUseCase.execute()).thenReturn(Single.just(feedList));
-
         Mockito.when(feedViewModeMapper.mapFeedsToViewModels(Mockito.any())).thenReturn(new ArrayList<>());
 
         userSubscriptionsPresenter.start();
         userSubscriptionsPresenter.activate();
 
         //invocations from activate and start
-        Mockito.clearInvocations(getUserFeedsUseCase, updateFeedUseCase);
+        Mockito.clearInvocations(getUserFeedsUseCase, updateFeedUseCase, view);
     }
 
     @Test
@@ -123,9 +125,11 @@ public final class UserSubscriptionsPresenterTest {
 
     @Test
     public void shouldUpdateUserSubscriptionsFromOrigin() throws Exception {
+        Mockito.when(updateFeedUseCase.execute(Mockito.any())).thenReturn(Completable.complete());
+
         userSubscriptionsPresenter.updateUserSubscriptions();
         Mockito.verify(getUserFeedsUseCase, Mockito.times(1)).execute();
-        Mockito.verify(updateFeedUseCase, Mockito.times(1)).execute(Mockito.any());
+        Mockito.verify(updateFeedUseCase, Mockito.times(3)).execute(Mockito.any());
 
         //should refresh screen
         Mockito.verify(view, Mockito.times(1)).showFeedSubscriptions(Mockito.any());
@@ -167,6 +171,5 @@ public final class UserSubscriptionsPresenterTest {
 
         Mockito.verify(disableBackgroundFeedUpdatesUseCase, Mockito.times(1)).execute();
         Mockito.verify(view, Mockito.times(1)).setIsBackgroundFeedUpdateEnabled(false);
-
     }
 }
