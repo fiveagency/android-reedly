@@ -76,10 +76,19 @@ public abstract class BasePresenter<View extends BaseView> implements ScopedPres
     @Override
     @CallSuper
     public void activate() {
+        subscribeToViewActionQueue();
+    }
+
+    protected void subscribeToViewActionQueue() {
         viewActionsSubscription = viewActionQueue.viewActionsObservable()
                                                  .observeOn(mainThreadScheduler)
-                                                 .subscribe(this::onViewAction, Throwable::printStackTrace);
+                                                 .subscribe(this::onViewAction, (throwable) -> onViewActionQueueError(throwable));
         viewActionQueue.resume();
+    }
+
+    private void onViewActionQueueError(final Throwable throwable) {
+        logError(throwable);
+        subscribeToViewActionQueue();
     }
 
     protected void onViewAction(final Action1<View> viewAction) {
