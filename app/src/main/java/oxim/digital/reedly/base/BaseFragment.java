@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import oxim.digital.reedly.configuration.RandomViewIdGenerator;
 import oxim.digital.reedly.configuration.ViewIdGenerator;
 import oxim.digital.reedly.dagger.fragment.DaggerFragment;
 import oxim.digital.reedly.domain.util.ActionRouter;

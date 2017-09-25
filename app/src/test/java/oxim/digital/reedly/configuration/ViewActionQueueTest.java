@@ -26,7 +26,7 @@ public final class ViewActionQueueTest {
     }
 
     @Test
-    public void shouldPassActionsWhenObservableEmitsAndResumed() throws Exception {
+    public void shouldPassActionsInResumedState() throws Exception {
         viewActionQueue.resume();
 
         viewActionQueue.subscribeTo(Completable.complete(), view -> {}, throwable -> {});
@@ -41,7 +41,7 @@ public final class ViewActionQueueTest {
     }
 
     @Test
-    public void shouldHoldActionsUntilResumedWhenObservableEmits() throws Exception {
+    public void shouldEnqueueActionsInPausedState() throws Exception {
         viewActionQueue.pause();
         viewActionQueue.subscribeTo(Completable.complete(), view -> {}, throwable -> {});
 
@@ -52,7 +52,7 @@ public final class ViewActionQueueTest {
     }
 
     @Test
-    public void shouldBeAbleToDestroyItselfAndUnSubscribeSubscribers() throws Exception {
+    public void shouldClearResourcesUponDestroy() throws Exception {
         viewActionQueue.destroy();
         testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();

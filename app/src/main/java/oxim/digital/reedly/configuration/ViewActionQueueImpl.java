@@ -21,11 +21,11 @@ public final class ViewActionQueueImpl<View> implements ViewActionQueue<View> {
 
     private final Scheduler observeScheduler;
 
+    private boolean isPaused = true;
+
     public ViewActionQueueImpl(final Scheduler observeScheduler) {
         this.observeScheduler = observeScheduler;
     }
-
-    private boolean isPaused;
 
     @Override
     public void subscribeTo(final Observable<Action1<View>> observable, final Action1<View> onCompleteAction, final Action1<Throwable> errorAction) {

@@ -131,7 +131,7 @@ public final class ArticlesPresenterTest {
     }
 
     @Test
-    public void shouldShowArticlesDetails() throws Exception {
+    public void shouldShowArticleDetails() throws Exception {
         final ArticleViewModel articleViewModel = new ArticleViewModel(AppTestData.TEST_ARTICLE_ID, AppTestData.TEST_STRING, AppTestData.TEST_LINK, AppTestData.TEST_STRING,
                                                                        false, false);
 
@@ -166,7 +166,7 @@ public final class ArticlesPresenterTest {
     }
 
     @Test
-    public void shouldRemoveArticleFromFavourites() throws Exception {
+    public void shouldMakeArticleNotFavourite() throws Exception {
         final ArticleViewModel articleViewModel = new ArticleViewModel(AppTestData.TEST_ARTICLE_ID, AppTestData.TEST_STRING, AppTestData.TEST_LINK, AppTestData.TEST_STRING,
                                                                        false, true);
 

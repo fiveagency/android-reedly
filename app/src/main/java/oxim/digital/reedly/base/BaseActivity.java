@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import oxim.digital.reedly.configuration.RandomViewIdGenerator;
 import oxim.digital.reedly.configuration.ViewIdGenerator;
 import oxim.digital.reedly.dagger.activity.DaggerActivity;
 import oxim.digital.reedly.domain.util.ActionRouter;
