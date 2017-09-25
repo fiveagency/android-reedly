@@ -95,15 +95,15 @@ public final class FeedRepositoryImplTest {
 
     @Test
     public void shouldReturnInfoAboutFeedExistingIfFeedExists() throws Exception {
-        testReturnInfoAboutFeedExisting(true);
+        testIfFeedExists(true);
     }
 
     @Test
-    public void testIfFeedExists() throws Exception {
-        testReturnInfoAboutFeedExisting(false);
+    public void shouldReturnInfoAboutFeedNotExistingIfFeedDoesNotExists() throws Exception {
+        testIfFeedExists(false);
     }
 
-    private void testReturnInfoAboutFeedExisting(final boolean exists) {
+    private void testIfFeedExists(final boolean exists) {
         Mockito.when(feedDao.doesFeedExist(DataTestData.TEST_COMPLEX_URL_STRING_1)).thenReturn(Single.just(exists));
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
@@ -287,21 +287,16 @@ public final class FeedRepositoryImplTest {
 
     @Test
     public void shouldReturnIfUpdateShouldOccurInBackground() throws Exception {
-        Mockito.when(preferenceUtils.shouldUpdateFeedsInBackground()).thenReturn(true);
-
-        final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
-        feedRepositoryImpl.shouldUpdateFeedsInBackground().subscribe(testSubscriber);
-
-        Mockito.verify(preferenceUtils, Mockito.times(1)).shouldUpdateFeedsInBackground();
-        Mockito.verifyNoMoreInteractions(preferenceUtils);
-
-        testSubscriber.assertCompleted();
-        testSubscriber.assertValue(true);
+        testIfUpdateShouldOccurInBackground(true);
     }
 
     @Test
     public void shouldReturnIfUpdateShouldNotOccurInBackground() throws Exception {
-        Mockito.when(preferenceUtils.shouldUpdateFeedsInBackground()).thenReturn(false);
+        testIfUpdateShouldOccurInBackground(false);
+    }
+
+    private void testIfUpdateShouldOccurInBackground(final boolean shouldOccurInBackground) {
+        Mockito.when(preferenceUtils.shouldUpdateFeedsInBackground()).thenReturn(shouldOccurInBackground);
 
         final TestSubscriber<Boolean> testSubscriber = new TestSubscriber<>();
         feedRepositoryImpl.shouldUpdateFeedsInBackground().subscribe(testSubscriber);
@@ -310,7 +305,7 @@ public final class FeedRepositoryImplTest {
         Mockito.verifyNoMoreInteractions(preferenceUtils);
 
         testSubscriber.assertCompleted();
-        testSubscriber.assertValue(false);
+        testSubscriber.assertValue(shouldOccurInBackground);
     }
 
     @Test
