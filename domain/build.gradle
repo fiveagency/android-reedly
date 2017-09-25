@@ -20,6 +20,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'io.reactivex:rxjava:' + project.ext.rxJavaVersion
     compile 'com.annimon:stream:' + project.ext.streamsVersion
+    compile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-inline:' + project.ext.mockitoVersion
 }
 
 retrolambda {

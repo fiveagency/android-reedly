@@ -1,7 +1,6 @@
 package oxim.digital.reedly.base;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import javax.inject.Inject;
 

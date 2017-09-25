@@ -8,7 +8,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import oxim.digital.reedly.configuration.UUIDViewIdGenerator;
 import oxim.digital.reedly.configuration.ViewActionQueueProvider;
+import oxim.digital.reedly.configuration.ViewActionQueueProviderImpl;
 import oxim.digital.reedly.configuration.ViewIdGenerator;
 import oxim.digital.reedly.dagger.application.ForApplication;
 import oxim.digital.reedly.dagger.application.ReedlyApplication;
@@ -39,13 +41,13 @@ public final class ApplicationModule {
     @Provides
     @Singleton
     ViewIdGenerator provideViewIdGenerator() {
-        return new ViewIdGenerator();
+        return new UUIDViewIdGenerator();
     }
 
     @Provides
     @Singleton
     ViewActionQueueProvider provideViewActionQueueProvider(final @Named(ThreadingModule.MAIN_SCHEDULER) Scheduler mainScheduler) {
-        return new ViewActionQueueProvider(mainScheduler);
+        return new ViewActionQueueProviderImpl(mainScheduler);
     }
 
     @Provides
