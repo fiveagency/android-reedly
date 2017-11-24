@@ -13,7 +13,7 @@ In order to build the project:
 1. git clone git@github.com:fiveagency/Reedly.git
 2. Import the project into Android Studio by selecting settings.gradle file in the root of the project.
 
-**NOTE:** You should use at least Android Studio 2.3.2.
+**NOTE:** You should use at least Android Studio 3.0
 
 
 
