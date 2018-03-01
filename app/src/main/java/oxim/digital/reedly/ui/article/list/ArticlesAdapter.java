@@ -1,17 +1,16 @@
 package oxim.digital.reedly.ui.article.list;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import oxim.digital.reedly.R;
@@ -77,16 +76,16 @@ public final class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.
 
     static final class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.article_title)
+        @BindView(R.id.article_title)
         TextView title;
 
-        @Bind(R.id.article_date)
+        @BindView(R.id.article_date)
         TextView publicationDate;
 
-        @Bind(R.id.article_favourite_indicator)
+        @BindView(R.id.article_favourite_indicator)
         ImageView favouriteIndicator;
 
-        @Bind(R.id.article_new_indicator)
+        @BindView(R.id.article_new_indicator)
         View newIndicator;
 
         private final Subject<ArticleViewModel, ArticleViewModel> clickSubject;

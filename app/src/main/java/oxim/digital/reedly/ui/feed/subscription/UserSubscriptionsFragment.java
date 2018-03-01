@@ -1,5 +1,12 @@
 package oxim.digital.reedly.ui.feed.subscription;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+import java.lang.annotation.Retention;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
@@ -11,23 +18,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import java.lang.annotation.Retention;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import oxim.digital.reedly.R;
 import oxim.digital.reedly.base.BaseFragment;
 import oxim.digital.reedly.base.ScopedPresenter;
 import oxim.digital.reedly.dagger.fragment.FragmentComponent;
 import oxim.digital.reedly.ui.model.FeedViewModel;
 import oxim.digital.reedly.util.ImageLoader;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public final class UserSubscriptionsFragment extends BaseFragment implements UserSubscriptionsContract.View {
 
@@ -46,16 +46,16 @@ public final class UserSubscriptionsFragment extends BaseFragment implements Use
     @Inject
     ImageLoader imageLoader;
 
-    @Bind(R.id.user_feeds_recycler_view)
+    @BindView(R.id.user_feeds_recycler_view)
     RecyclerView userFeedsRecyclerView;
 
-    @Bind(R.id.empty_state_view)
+    @BindView(R.id.empty_state_view)
     View emptyStateView;
 
-    @Bind(R.id.add_new_feed_button)
+    @BindView(R.id.add_new_feed_button)
     FloatingActionButton actionButton;
 
-    @Bind(R.id.toggle_notifications_button)
+    @BindView(R.id.toggle_notifications_button)
     ImageView backgroundUpdatesNotification;
 
     private RecyclerView.LayoutManager feedsLayoutManager;
@@ -67,6 +67,8 @@ public final class UserSubscriptionsFragment extends BaseFragment implements Use
     @ViewState
     private int viewState = ADD_FEED;
 
+    private Unbinder unbinder;
+
     public static UserSubscriptionsFragment newInstance() {
         return new UserSubscriptionsFragment();
     }
@@ -75,7 +77,7 @@ public final class UserSubscriptionsFragment extends BaseFragment implements Use
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_user_subscriptions, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder =ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
@@ -148,7 +150,7 @@ public final class UserSubscriptionsFragment extends BaseFragment implements Use
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
