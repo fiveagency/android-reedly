@@ -1,5 +1,9 @@
 package oxim.digital.reedly.ui.article.list;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,13 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import oxim.digital.reedly.R;
 import oxim.digital.reedly.base.BaseFragment;
 import oxim.digital.reedly.base.ScopedPresenter;
@@ -36,14 +36,15 @@ public final class ArticlesFragment extends BaseFragment implements ArticlesCont
     @Inject
     Resources resources;
 
-    @Bind(R.id.feedTitle)
+    @BindView(R.id.feedTitle)
     TextView feedTitle;
 
-    @Bind(R.id.articles_recycler_view)
+    @BindView(R.id.articles_recycler_view)
     RecyclerView articlesRecyclerView;
 
     private RecyclerView.LayoutManager articlesLayoutManager;
     private ArticlesAdapter articlesAdapter;
+    private Unbinder unbinder;
 
     public static ArticlesFragment newInstance(final int feedId, final String feedTitle) {
         final ArticlesFragment fragment = new ArticlesFragment();
@@ -66,7 +67,7 @@ public final class ArticlesFragment extends BaseFragment implements ArticlesCont
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_articles, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
@@ -135,7 +136,7 @@ public final class ArticlesFragment extends BaseFragment implements ArticlesCont
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
